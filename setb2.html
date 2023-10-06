@@ -1,0 +1,35 @@
+<hyml>
+  <body>
+    <form action="setb2.php">
+      Enter a String:
+      <input type="text" name="str" /><br />
+
+      Select Seperator:
+      <select name="sep">
+        <option value="#">#</option>
+        <option value="%">%</option>
+        <option value="@">@</option>
+        <option value="!">!</option>
+        <option value=",">,</option>
+      </select>
+      <br />
+
+      Select Operation:<br>
+
+      <ul><input type="radio" name="op" value="1" >Split the String UsingSeparator</input><br/></ul>
+      <ul><input type="radio" name="op" value="2" >Replace all Occurances of Separator</input><br/>
+            <ul>Enter Operator for separation <select name="sep2">
+                                                 <option value="#">#</option>
+                                                 <option value="%">%</option>
+                                                 <option value="@">@</option>
+                                                 <option value="!">!</option>
+                                                 <option value=",">,</option>
+                                               </select>
+              <br /> </ul>
+      </ul>
+      <ul><input type="radio" name="op" value="3" >Find last world of the givenstring</input><br/></ul>
+
+      <input type="submit" value="ENTER" />
+    </form>
+  </body>
+</hyml>

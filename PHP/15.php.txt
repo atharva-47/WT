@@ -1,0 +1,43 @@
+<html>
+<body>
+<form method="post" action="Slip15.php">
+Enter a String: <input type="text" name="t1"><br>
+
+<input type="radio" name="op" value="1">Select 5 words<br>
+<input type="radio" name="op" value="2">LowerCase<br>
+<input type="radio" name="op" value="3">Padding<br>
+<input type="radio" name="op" value="4">Remove Spaces<br>
+<input type="radio" name="op" value="5">Reverse<br><br>
+
+<input type="submit" value="Submit">
+</form>
+</body>
+</html>
+<?php
+if (isset($_POST['t1']) && isset($_POST['op'])) {
+    $str = $_POST['t1']; // Access form data using $_POST
+    $ch = $_POST['op'];
+
+    if ($ch == 1) {
+        $first5 = substr($str, 0, 5); // Select first 5 characters
+        echo $first5;
+    } elseif ($ch == 2) {
+        $str = strtolower($str);
+        echo $str;
+        $str = ucwords($str);
+        echo "<br>$str";
+    } elseif ($ch == 3) {
+        $str = str_pad($str, 20, "*", STR_PAD_BOTH);
+        echo $str;
+    } elseif ($ch == 4) {
+        $str = str_replace(' ', '', $str); // Replace spaces with an empty string
+        echo $str;
+    } elseif ($ch == 5) {
+        $str = strrev($str);
+        echo $str;
+    } else {
+        echo "Invalid operation selected"; // Handle invalid radio button options
+    }
+}
+?>
+

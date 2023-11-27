@@ -1,0 +1,14 @@
+<html> 
+<head> 
+<link rel=stylesheet href="bootstrap.min.css"> 
+</head> 
+<body> 
+<form > 
+<input type= button value="primary" class="btn btn-primary"> 
+<input type= button value="warning" class="btn btn-warning"> 
+<input type= button value="secondary"class="btn btn-Secondary"> 
+<input type= button value="success" class="btn btn-success"> 
+<input type= button value="info" class="btn btn-info"> 
+<input type= button value="danger" class="btn btn-danger"> 
+</body> 
+</html>

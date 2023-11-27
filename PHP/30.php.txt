@@ -1,0 +1,103 @@
+<html>
+	<form method=GET action='q2.php'>
+		<label>Enter competition name : </label><input type="text" name="compName"><br/><br/>
+		<input type="submit" name="submit" value="View student details">
+	</form>
+</html>
+
+<?php
+	$compName=$_GET['compName'];
+	
+	$db_connection=pg_connect("host=linux1 dbname=tybsc58 user=tybsc58");
+	if(!$db_connection)
+		echo "fail";
+	else
+		//echo "success";	
+		echo  "Student table<br/><br/>";
+		$query="select *from Student";
+		$result=pg_query($db_connection,$query);
+
+		if(!$result)
+			echo "Error occured.";
+		else
+			echo "Stud-id_Name_Class<br/>-----------------------------<br/>";
+
+			while($row=pg_fetch_row($result))
+			{
+				echo "$row[0]-----------$row[1]----$row[2]";
+				echo "<br/><br/>";
+			}
+
+		$select_query="select stud_id,name,class from Student where stud_id in(select stud_id from stu_comp where c_no in(select c_no from Competition where c_name='$compName') AND rank=1);";
+		$res=pg_query($db_connection,$select_query);
+		$res1=pg_query($db_connection,$select_query);
+		if(!$res)
+			echo "ERROR";
+		else
+			echo "<hr/>Query executed";
+			
+			if(($r=pg_fetch_row($res))=="")	
+			{
+				echo "<hr/>Data related to $compName is not present in the table.<hr/>";
+				exit(0);
+			}
+
+			echo "<br/><hr/><br/>Details of student who has secured 1st rank in $compName<br/>";
+			echo "<br/>Stud-id_Name_Class<br/>-----------------------------<br/>";
+			while($row=pg_fetch_row($res1))
+			{
+				echo "$row[0]-----------$row[1]----$row[2]";
+				echo "<br/><br/>";
+			}
+	
+		echo "<hr/>";
+
+	pg_close($db_connection);
+	
+?>
+
+
+-- Create Student table
+CREATE TABLE Student (
+    stud_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    class VARCHAR(50) NOT NULL
+);
+
+-- Create Competition table
+CREATE TABLE Competition (
+    c_no SERIAL PRIMARY KEY,
+    c_name VARCHAR(100) NOT NULL,
+    type VARCHAR(50) NOT NULL
+);
+
+-- Create Student_Competition table (Associative table for many-to-many relationship)
+CREATE TABLE Student_Competition (
+    stud_id INT REFERENCES Student(stud_id),
+    c_no INT REFERENCES Competition(c_no),
+    rank INT NOT NULL,
+    year INT NOT NULL,
+    PRIMARY KEY (stud_id, c_no)
+);
+
+INSERT INTO Student (name, class) VALUES
+    ('John Doe', 'Class A'),
+    ('Jane Smith', 'Class B'),
+    ('Bob Johnson', 'Class C');
+
+INSERT INTO Competition (c_name, type) VALUES
+    ('Math Olympiad', 'Academic'),
+    ('Sports Day', 'Sports'),
+    ('Science Fair', 'Academic');
+
+INSERT INTO Student_Competition (stud_id, c_no, rank, year) VALUES
+    (1, 1, 1, 2022);
+
+
+INSERT INTO Student_Competition (stud_id, c_no, rank, year) VALUES
+    (2, 2, 1, 2023);
+
+INSERT INTO Student_Competition (stud_id, c_no, rank, year) VALUES
+    (3, 3, 1, 2022);
+
+

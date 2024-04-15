@@ -1,0 +1,1453 @@
+SLIP 1
+
+<?php
+    session_start();
+
+    if(!isset($_SESSION['pageCnt']))
+        $_SESSION['pageCnt'] = 1;
+    else
+        $_SESSION['pageCnt']++;
+        
+    echo "Page is accessed ".$_SESSION['pageCnt'] ." times.";
+?>
+
+__________________________________________________________________________________________________________________________________________________________
+
+SLIP 2
+
+<html>
+    <head>
+        <title>to do supply </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="setting.php" method="post">
+            Font Style :
+            <select name="style">
+                <option>arial</option>
+                <option>times new roman</option>
+            </select><br>
+            Font Size :
+            <select name="size">
+                <option>small</option>
+                <option>big</option>
+                </select><br>
+            Font Color :
+            <select name="color">
+                <option>red</option>
+                <option>blue</option>
+                <option>green</option>
+            </select><br>
+            Background Color :
+            <select name="bgColor">
+                <option>yellow</option>
+                <option>black</option>
+            </select><br>
+            <input type="submit" value="Save Preferences">
+        </form>
+    </body>
+</html>
+
+
+Result.php
+<?php
+
+    $style = $_COOKIE['style'];
+    $size = $_COOKIE['size'];
+    $color = $_COOKIE['color'];
+    $bgColor = $_COOKIE['bgColor'];
+
+    echo "<h1 style='font-family: $style; font-size: $size; color: $color; background-color: $bgColor;'>How are you doing?</h1>";
+?>
+
+
+Setting.php
+<?php
+
+    $style = $_POST['style'];
+    $size = $_POST['size'];
+    $color = $_POST['color'];
+    $bgColor = $_POST['bgColor'];
+
+    setcookie("style", $style);
+    setcookie("size", $size);
+    setcookie("color", $color);
+    setcookie("bgColor", $bgColor);
+    
+    
+    echo "Font Style: $style <br>";
+    echo "Font size: $size <br>";
+    echo "Font color: $color <br>";
+    echo "Background color: $bgColor <br>";
+    
+    echo "<a href='result.php'>Apply Settings</a>"
+?>
+
+____________________________________________________________________________________________________________________________________________________
+
+SLIP 3
+
+<?php
+session_start();
+
+// Define correct credentials
+$correctUser = "gayatri12admane08";
+$correctPass = "gayuuuu";
+
+// Get user input
+$user = $_POST['user'] ?? '';
+$pass = $_POST['pass'] ?? '';
+
+// Initialize error message
+$errorMsg = '';
+
+// Check login attempts
+if (!empty($_SESSION['attempts']) && $_SESSION['attempts'] >= 3) {
+    $errorMsg = "Max login attempts reached.";
+} elseif ($user === $correctUser && $pass === $correctPass) {
+    $_SESSION = ['user' => $user, 'attempts' => 0]; // Reset attempts and set user
+    header("Location: welcome.php");
+    exit;
+} else {
+    $_SESSION['attempts'] = ($_SESSION['attempts'] ?? 0) + 1;
+    $errorMsg = "Invalid credentials. " . (3 - $_SESSION['attempts']) . " attempts left.";
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head><title>Login</title></head>
+<body>
+    <h2>Login</h2>
+    <form method="post">
+        Username: <input type="text" name="user" value="<?= htmlspecialchars($user); ?>"><br>
+        Password: <input type="password" name="pass"><br>
+        <input type="submit" value="Login">
+        <div style="color:red"><?= $errorMsg; ?></div>
+    </form>
+</body>
+</html>
+
+____________________________________________________________________________________________________________________________________________________________
+
+
+SLIP 4
+
+
+EmployeeDetails.php
+
+<?php
+session_start();
+
+if(isset($_POST['submit'])) {
+    $_SESSION['eno'] = $_POST['eno'];
+    $_SESSION['ename'] = $_POST['ename'];
+    $_SESSION['address'] = $_POST['address'];
+    header("Location: earning_details.php");
+    exit();
+}
+?>
+
+<html>
+<head>
+    <title>Employee Details</title>
+</head>
+<body>
+    <h2>Enter Employee Details</h2>
+    <form action="employee_details.php" method="post">
+        Enter Eno: <input type="text" name="eno"><br>
+        Enter Ename: <input type="text" name="ename"><br>
+        Enter Address: <input type="text" name="address"><br>
+        <input type="submit" name="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+Earning_details.php
+<?php
+session_start();
+
+if(isset($_POST['submit'])) {
+    $_SESSION['basic'] = $_POST['basic'];
+    $_SESSION['da'] = $_POST['da'];
+    $_SESSION['hra'] = $_POST['hra'];
+    header("Location: print_details.php");
+    exit();
+}
+?>
+
+<html>
+<head>
+    <title>Earning Details</title>
+</head>
+<body>
+    <h2>Enter Earning Details</h2>
+    <form action="earning_details.php" method="post">
+        Enter Basic: <input type="text" name="basic"><br>
+        Enter DA: <input type="text" name="da"><br>
+        Enter HRA: <input type="text" name="hra"><br>
+        <input type="submit" name="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+
+print_details.php
+
+<?php
+session_start();
+
+$eno = $_SESSION['eno'];
+$ename = $_SESSION['ename'];
+$address = $_SESSION['address'];
+$basic = $_SESSION['basic'];
+$da = $_SESSION['da'];
+$hra = $_SESSION['hra'];
+
+echo "<h1>Employee Information</h1>";
+echo "<h3>Eno: $eno</h3>";
+echo "<h3>Ename: $ename</h3>";
+echo "<h3>Address: $address</h3>";
+echo "<h3>Basic: $basic</h3>";
+echo "<h3>DA: $da</h3>";
+echo "<h3>HRA: $hra</h3>";
+?>
+
+____________________________________________________________________________________________________________________________________________________________
+
+
+SLIP 5
+
+<?php 
+
+$str =<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+    <item>
+        <name>Shirt</name>
+        <rate>150</rate>
+        <qty>15</qty>
+    </item>
+    <item>
+        <name>PC</name>
+        <rate>150000</rate>
+        <qty>5</qty>
+    </item>
+    <item>
+        <name>Mobile</name>
+        <rate>40000</rate>
+        <qty>6</qty>
+    </item>
+    <item>
+        <name>Watch</name>
+        <rate>4200</rate>
+        <qty>7</qty>
+    </item>
+    <item>
+        <name>Shoes</name>
+        <rate>1500</rate>
+        <qty>4</qty>
+    </item>
+</items>
+XML;
+
+$fname = "Item.xml";
+$fp = fopen($fname , "w+");
+fwrite($fp , $str);
+fclose($fp);
+
+echo 'Created filename is : '.$fname;
+?>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 6
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+    <book>
+        <name>PHP</name>
+        <price>2000</price>
+    </book>
+    <book>
+        <name>C</name>
+        <price>111</price>
+    </book>
+</books>
+
+<?php 
+
+$xml = simplexml_load_file("book.xml");
+
+foreach($xml ->book as $b)
+{
+    echo "Name :$b->name "."<br>";
+    echo "Price :$b->price <br><br>";
+}
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 7
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Movies>
+    <Movie>
+        <MovieNo>1</MovieNo>
+        <MovieTitle>Movie 1</MovieTitle>
+        <ActorName>Actor A</ActorName>
+        <ReleaseYear>2020</ReleaseYear>
+    </Movie>
+    <Movie>
+        <MovieNo>2</MovieNo>
+        <MovieTitle>Movie 2</MovieTitle>
+        <ActorName>Actor B</ActorName>
+        <ReleaseYear>2018</ReleaseYear>
+    </Movie>
+    <Movie>
+        <MovieNo>3</MovieNo>
+        <MovieTitle>Movie 3</MovieTitle>
+        <ActorName>Actor C</ActorName>
+        <ReleaseYear>2000</ReleaseYear>
+    </Movie>
+    <Movie>
+        <MovieNo>4</MovieNo>
+        <MovieTitle>Movie 4</MovieTitle>
+        <ActorName>Actor D</ActorName>
+        <ReleaseYear>1999</ReleaseYear>
+    </Movie>
+    <Movie>
+        <MovieNo>5</MovieNo>
+        <MovieTitle>Movie 5</MovieTitle>
+        <ActorName>Actor E</ActorName>
+        <ReleaseYear>2023</ReleaseYear>
+    </Movie>
+</Movies>
+
+
+<?php 
+$dom = new DOMDocument();
+
+$dom->load("Movie.xml");
+
+$movie_title = $dom -> getElementsByTagName("MovieTitle");
+echo "Movie Title Name <br>";
+foreach($movie_title as $title)
+{
+    echo $title->textContent ."<br>";
+}
+
+$actor_name = $dom -> getElementsByTagName("ActorName");
+echo "Actor Names :";
+foreach($actor_name as $name)
+{
+    echo $name->textContent."<br>";
+
+}
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 8
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script>
+            alert('Exams are near, have you started preparing for?');
+            
+            let a = prompt("Enter first number:");
+            let b = prompt("Enter second number:");
+            
+            a = parseInt(a);
+            b = parseInt(b);
+            
+            let sum = a + b;
+            confirm("Sum is " + sum);
+        </script>
+    </body>
+</html>
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 9
+
+function validateForm() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  const minUsernameLength = 6;
+  const minPasswordLength = 8;
+
+  const usernameError = "Username must be at least " + minUsernameLength + " characters long.";
+  const passwordError = "Password must be at least " + minPasswordLength + " characters long.";
+
+  let isValid = true;
+  if (username === "") {
+    alert(usernameError);
+    isValid = false;
+  } else if (username.length < minUsernameLength) {
+    alert(usernameError);
+    isValid = false;
+  }
+
+  if (password === "") {
+    alert(passwordError);
+    isValid = false;
+  } else if (password.length < minPasswordLength) {
+    alert(passwordError);
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 10
+
+<!DOCTYPE html>
+<html>
+     <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head> 
+    <body>
+        <p id="para">Hello JavaScript.</p> <br>
+        <button id="b1">Insert Before</button>
+        <button id="b2">Insert After</button>
+        
+        <script>
+            $(document).ready(function() {
+               $('#b1').click(function() {
+                    $('#para').before("<p>Hi .</p>");
+               });
+               $('#b2').click(function() {
+                    $('#para').after("<p>Bye .</p>");
+               });
+            });
+        </script>
+    </body>
+</html>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 11
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Details</title>
+</head>
+<body>
+  <h1>Enter Student Name:</h1>
+  <input type="text" id="studentName" onblur="updateFont()">
+  <br><br>
+  <img id="studentImage" src="image.png" alt="Student Image" onmouseover="changeImageSize(true)" onmouseout="changeImageSize(false)">
+
+  <script>
+    function updateFont() {
+      const studentName = document.getElementById("studentName");
+      const studentNameValue = studentName.value.trim();
+
+      if (studentNameValue) {
+        studentName.style.fontSize = "18px";
+        studentName.style.color = "red";
+      } else {
+        studentName.style.fontSize = "14px";
+        studentName.style.color = "black";
+      }
+    }
+
+    function changeImageSize(isHover) {
+      const studentImage = document.getElementById("studentImage");
+      studentImage.style.display = isHover ? "block" : "none";
+
+      const defaultWidth = 100;
+      const defaultHeight = 100;
+      const hoverWidth = 150;
+      const hoverHeight = 150;
+
+      if (isHover) {
+        studentImage.style.width = hoverWidth + "px";
+        studentImage.style.height = hoverHeight + "px";
+      } else {
+        studentImage.style.width = defaultWidth + "px";
+        studentImage.style.height = defaultHeight + "px";
+      }
+    }
+
+    window.onload = function() {
+      updateFont(); // Call updateFont on page load (optional)
+    };
+  </script>
+</body>
+</html>
+
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 12
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacts</title>
+</head>
+<body>
+  <h1>Contacts</h1>
+  <button id="printButton" onclick="getContacts()">Print Contacts</button>
+  <br><br>
+  <div id="contactsTable"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+function getContacts() {
+  const contactsTable = document.getElementById("contactsTable");
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "read_contacts.php", true); // Replace with server-side script URL
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      contactsTable.innerHTML = xhr.responseText;
+    } else {
+      console.error("Error:", xhr.statusText);
+      contactsTable.textContent = "Error: Failed to read contacts.";
+    }
+  };
+  xhr.send();
+}
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 13
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Name Recognition</title>
+</head>
+<body>
+  <h1>Who are you?</h1>
+  <input type="text" id="userName" onkeyup="checkName()">
+  <br><br>
+  <div id="response"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+function checkName() {
+  const userName = document.getElementById("userName").value.trim();
+  const responseDiv = document.getElementById("response");
+
+  if (!userName) {
+    responseDiv.textContent = "Stranger, please tell me your name!";
+  } else {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "check_name.php?name=" + userName, true); // Replace with server-side script URL
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        responseDiv.textContent = xhr.responseText;
+      } else {
+        console.error("Error:", xhr.statusText);
+      }
+    };
+    xhr.send();
+  }
+}
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 14
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Details</title>
+</head>
+<body>
+  <h1>Select Teacher</h1>
+  <select id="teacherSelect" onchange="getTeacherDetails()">
+    </select>
+  <br><br>
+  <div id="teacherDetails"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+const teachers = [
+  { tno: 1001, tname: "Alice Smith", qualification: "M.Sc", salary: 50000 },
+  { tno: 1002, tname: "Bob Johnson", qualification: "B.Ed", salary: 45000 },
+];
+
+function populateDropdown() {
+  const teacherSelect = document.getElementById("teacherSelect");
+
+  teachers.forEach(teacher => {
+    const option = document.createElement("option");
+    option.value = teacher.tno;
+    option.text = teacher.tname;
+    teacherSelect.appendChild(option);
+  });
+}
+
+function getTeacherDetails() {
+  const selectedTno = document.getElementById("teacherSelect").value;
+  const teacherDetails = document.getElementById("teacherDetails");
+
+  const selectedTeacher = teachers.find(teacher => teacher.tno === parseInt(selectedTno));
+
+  if (selectedTeacher) {
+    teacherDetails.innerHTML = `
+      <h2>${selectedTeacher.tname}</h2>
+      <p>Qualification: ${selectedTeacher.qualification}</p>
+      <p>Salary: $${selectedTeacher.salary}</p>
+`;
+  } else {
+    teacherDetails.innerHTML = "Teacher details not found.";
+  }
+}
+populateDropdown(); // Call to populate dropdown on page load
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip  15
+
+
+<html>
+<head>
+<script type="text/javascript" >
+         function m1(str)
+         {
+                     var ob=false;
+                     ob=new XMLHttpRequest();
+                     ob.open("GET","slip_15.php?q="+str);
+                     ob.send();               
+ob.onreadystatechange=function()
+                     {
+                                 if(ob.readyState==4 && ob.status==200)
+                                 {
+                                             document.getElementById("a").innerHTML=ob.responseText;
+                                 }
+                     }          
+         }
+</script>
+</head>
+<body>
+<form>
+Search<input type=text name=search size="20" onkeyup="m1(form.search.value)">
+<input type=button value="submit" onclick="m1(form.search.value)">
+</form>
+suggestions :<span id="a"></span><br>
+</body>
+</html>
+
+Php file :
+
+<?php
+$a=array("pune","satara","nashik","sangli","mumbai","murud","akola","dound","dhule","ratnagiri","rajpur");
+
+$q=$_GET['q'];
+
+if(strlen($q)>0)
+{       
+         $match="";
+         for($i=0;$i<count($a);$i++)
+         {
+                     if(strtolower($q)==strtolower(substr($a[$i],0,strlen($q))))
+                     {
+                                 if($match=="")
+                                 $match=$a[$i];                         
+                                             else $match=$match.",".$a[$i];
+                     }          
+         }
+if($match=="")
+echo "No Suggestios";
+else echo $match;
+}
+?>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 16
+
+<html>
+<body>
+<script type="text/javascript">
+function show_confirm()
+{
+var r=confirm("Press a button !");
+if(r==true)
+{
+ver i;
+var mybooks = new Array();
+mybooks[0]="Mysql";
+mybooks[1]="PHP";
+mybooks[2]="Java";
+for(i=0;i {
+document.write(mybookks[i]+"
+");
+}
+}
+else
+{
+
+alert("Cancel books cannot br displayed !");
+}
+}
+</script>
+</head>
+<body>
+<input type="button" onclick="show_confirm()" value="List of Books"/>
+</body>
+</html>
+
+File.xml
+<?xml version='1.0' encoding='utf-8'?>
+//use to double qoute for display version "1.0" and "utf-8".don't use singlr qoute.
+<ABCBOOLK>
+<Book>
+<Book_Title>Networking</Book_Title>
+<Book_Author>400</Book_Author>
+<Book_PubYear>2015</Book_PubYear>
+<Book_Price>450</Book_Price>
+</Book>
+<Book>
+<Book_Title>php </Book_Title>
+<Book_Author>400</Book_Author>
+<Book_PubYear>2015</Book_PubYear>
+<Book_Price>450</Book_Price>
+</Book>
+<Book>
+<Book_Title>java</Book_Title>
+<Book_Author>400</Book_Author>
+<Book_PubYear>2015</Book_PubYear>
+<Book_Price>450</Book_Price>
+</Book>
+</ABCBOOLK> 
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 17
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            const currentTime = new Date().getHours();
+
+            let greeting;
+            if (currentTime >= 5 && currentTime < 12) {
+                greeting = "Hello, Good Morning!";
+            } else if (currentTime >= 12 && currentTime < 18) {
+                greeting = "Hello, Good Afternoon!";
+            } else {
+                greeting = "Hello, Good Evening!";
+            }
+
+            alert(greeting);
+        };
+    </script>
+
+    <h1>Student Registration</h1>
+
+    <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required placeholder="Enter your name">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email">
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 18
+
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Fibonacci Series</h1>
+        <div id="f1"></div>
+        <button onclick="fibonacci()">Print</button>
+        
+        <script>
+            var div = document.getElementById('f1');
+            
+            function fibonacci() {
+                let n1 = 0;
+                let n2 = 1;
+                
+                div.innerHTML = n1 + "<br>" + n2 + "<br>";
+                for(let i=2; i<10; i++) {
+                    let n3 = n1 + n2;
+                    n1 = n2;
+                    n2 = n3;
+                    div.innerHTML += n3 + "<br>";
+                }
+            }
+        </script>
+    </body>
+</html>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 19
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h2>Login</h2>
+  <form id="loginForm" onsubmit="return validate()">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br><br>
+    <button type="submit">Login</button>
+  </form>
+  <script>
+    function validate() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert("Username and password required!");
+        return false;
+      }
+
+      // Replace with your actual validation logic
+      if (username !== "valid_username" || password !== "valid_password") {
+        alert("Invalid credentials!");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+ 
+Slip  20
+
+
+<?php 
+$str = <<<xml
+<?xml version="1.0" ?>
+    <StudentDetails>
+        <student>
+            <name>Bhalchandra</name>
+            <class>TYBCS</class>
+            <branch>CS</branch>
+        </student>
+        <student>
+            <name>Rahul</name>
+            <class>TYBCS</class>
+            <branch>CS</branch>
+        </student>
+        <student>
+            <name>Gaurav</name>
+            <class>BTECH</class>
+            <branch>CSE</branch>
+        </student>
+        <student>
+            <name>Harish</name>
+            <class>SYBCS</class>
+            <branch>CS</branch>
+        </student>
+        <student>
+            <name>Roahn</name>
+            <class>TYBCS</class>
+            <branch>CS</branch>
+        </student>
+        
+</StudentDetails>
+xml;
+$fp  = fopen("./student.xml" , "w+");
+fwrite($fp , $str);
+fclose($fp);
+echo "File created successfully";
+
+<?xml version="1.0" ?>
+    <StudentDetails>
+        <student>
+            <name>Harish</name>
+            <class>TYBCS</class>
+            <branch>CS</branch>
+        </student>
+        <student>
+            <name>Pratik</name>
+            <class>TYBCS</class>
+            <branch>CS</branch>
+        </student>
+        <student>
+            <name>Rupesh</name>
+            <class>BTECH</class>
+            <branch>CSE</branch>
+        </student>
+        <student>
+            <name>Rakesh</name>
+            <class>SYBCS</class>
+            <branch>CS</branch>
+        </student>
+        <student>
+            <name>Roahn</name>
+            <class>TYBCS</class>
+            <branch>CS</branch>
+        </student>
+        
+</StudentDetails>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+Slip 24
+
+
+<?php
+
+// Function to create student element
+function createStudentElement($studentData) {
+  $doc = new DOMDocument();
+  $studentElement = $doc->createElement("student");
+
+  foreach ($studentData as $key => $value) {
+    $element = $doc->createElement($key);
+    $textNode = $doc->createTextNode($value);
+    $element->appendChild($textNode);
+    $studentElement->appendChild($element);
+  }
+
+  return $studentElement;
+}
+
+// Function to retrieve student data based on course
+function getStudentsByCourse($course) {
+  $students = array();
+  $xml = simplexml_load_file("student.xml");
+
+  foreach ($xml->student as $student) {
+    if ((string)$student->course === $course) {
+      $studentData = array(
+        "roll_no" => (string)$student->roll_no,
+        "name" => (string)$student->name,
+        "address" => (string)$student->address,
+        "college" => (string)$student->college,
+      );
+      $students[] = $studentData;
+    }
+  }
+
+  return $students;
+}
+
+// Student data (modify as needed)
+$students = array(
+  array(
+    "roll_no" => 1001,
+    "name" => "John Doe",
+    "address" => "123 Main St",
+    "college" => "University A",
+    "course" => "Computer Science",
+  ),
+  array(
+    "roll_no" => 1002,
+    "name" => "Jane Smith",
+    "address" => "456 Elm St",
+    "college" => "University B",
+    "course" => "Mathematics",
+  ),
+  array(
+    "roll_no" => 1003,
+    "name" => "Michael Lee",
+    "address" => "789 Oak St",
+    "college" => "University A",
+    "course" => "Computer Science",
+  ),
+);
+
+// Create XML document (if it doesn't exist)
+if (!file_exists("student.xml")) {
+  $doc = new DOMDocument();
+  $rootElement = $doc->createElement("students");
+  $doc->appendChild($rootElement);
+
+  foreach ($students as $studentData) {
+    $studentElement = createStudentElement($studentData);
+    $rootElement->appendChild($studentElement);
+  }
+
+  $doc->formatOutput = true;
+  $doc->save("student.xml");
+}
+
+// User input for course
+if (isset($_POST["course"])) {
+  $course = $_POST["course"];
+  $studentsByCourse = getStudentsByCourse($course);
+
+  if (count($studentsByCourse) > 0) {
+    echo "<h2>Students Enrolled in $course</h2>";
+    echo "<table>";
+    echo "<tr><th>Roll No</th><th>Name</th><th>Address</th><th>College</th></tr>";
+    foreach ($studentsByCourse as $student) {
+      echo "<tr>";
+      echo "<td>" . $student["roll_no"] . "</td>";
+      echo "<td>" . $student["name"] . "</td>";
+      echo "<td>" . $student["address"] . "</td>";
+      echo "<td>" . $student["college"] . "</td>";
+      echo "</tr>";
+    }
+    echo "</table>";
+  } else {
+    echo "No students found for course: $course";
+  }
+} else {
+  // Display a form to accept course input
+  echo "<form method='post'>";
+  echo "<label for='course'>Enter Course:</label>";
+  echo "<input type='text' name='course' required>";
+  echo "<button type='submit'>Search</button>";
+  echo "</form>";
+}
+
+?>
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+Slip 25
+
+<?php
+$teams = array(
+  "Australia" => array(
+    array("name" => "David Warner", "runs" => 180, "wickets" => 0),
+    array("name" => "Steve Smith", "runs" => 125, "wickets" => 0),
+    array("name" => "Pat Cummins", "runs" => 10, "wickets" => 3),
+  ),
+  "India" => array(
+    array("name" => "Rohit Sharma", "runs" => 97, "wickets" => 0),
+    array("name" => "Virat Kohli", "runs" => 78, "wickets" => 0),
+    array("name" => "Jasprit Bumrah", "runs" => 5, "wickets" => 4),
+  ),
+);
+$doc = new DOMDocument();
+$cricketTeamElement = $doc->createElement("CricketTeam");
+$doc->appendChild($cricketTeamElement);
+
+foreach ($teams as $country => $players) {
+  $teamElement = $doc->createElement("Team");
+  $teamElement->setAttribute("country", $country);
+
+  foreach ($players as $player) {
+    $playerElement = $doc->createElement("player");
+    $playerElement->textContent = $player["name"];
+    $teamElement->appendChild($playerElement);
+
+    $runsElement = $doc->createElement("runs");
+    $runsElement->textContent = $player["runs"];
+    $teamElement->appendChild($runsElement);
+
+    $wicketElement = $doc->createElement("wicket");
+    $wicketElement->textContent = $player["wickets"];
+    $teamElement->appendChild($wicketElement);
+  }
+
+  $cricketTeamElement->appendChild($teamElement);
+}
+
+$doc->formatOutput = true;
+$doc->save("cricket.xml");
+
+echo "cricket.xml created successfully!";
+
+?>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 26
+
+
+CREATE TABLE IF NOT EXISTS EMP (
+  eno INT PRIMARY KEY AUTO_INCREMENT,
+  ename VARCHAR(50) NOT NULL,
+  designation VARCHAR(50) NOT NULL,
+  salary DECIMAL(10,2) NOT NULL
+);
+
+
+INSERT INTO EMP (ename, designation, salary) VALUES ('John Doe', 'Manager', 80000.00);
+INSERT INTO EMP (ename, designation, salary) VALUES ('Jane Smith', 'Developer', 75000.00);
+INSERT INTO EMP (ename, designation, salary) VALUES ('Michael Lee', 'Tester', 60000.00);
+
+
+<?php
+// Database connection details
+$servername = "localhost";
+$username = "your_username";
+$password = "your_password";
+$dbname = "your_database_name";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+// SQL query to fetch employee names
+$sql = "SELECT ename FROM EMP";
+$result = $conn->query($sql);
+
+// Check query results
+if ($result->num_rows > 0) {
+  echo "<form id='employeeForm'>";
+  echo "<label for='employeeName'>Select Employee:</label>";
+  echo "<select id='employeeName' name='employeeName'>";
+  while($row = $result->fetch_assoc()) {
+    echo "<option value='" . $row["ename"] . "'>" . $row["ename"] . "</option>";
+  }
+  echo "</select>";
+  echo "<button type='button' onclick='getEmployeeDetails()'>Get Details</button>";
+  echo "</form>";
+  echo "<div id='employeeDetails'></div>"; // Placeholder for details
+} else {
+  echo "No employees found";
+}
+
+$conn->close();
+?>
+
+<script>
+function getEmployeeDetails() {
+  const selectedName = document.getElementById("employeeName").value;
+  
+  // Use AJAX to send the selected name to a separate PHP script for processing
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "get_details.php?name=" + selectedName, true);
+  xhr.onload = function() {
+    if (this.status === 200) {
+      document.getElementById("employeeDetails").innerHTML = this.responseText;
+    } else {
+      console.error(this.statusText);
+    }
+  };
+  xhr.send();
+}
+</script>
+
+**4. PHP Script (get_details.php):**
+
+This script receives the selected employee name from the Ajax request, retrieves the complete details from the database, and sends them back as a response.
+
+```php
+<?php
+// Database connection details (same as employee_details.php)
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+$selectedName = $_GET["name"]; // Get selected name from query string
+
+// SQL query to fetch employee details based on name
+$sql = "SELECT * FROM EMP WHERE ename = '$selectedName'";
+$result = $conn->query($sql);
+
+// Check query results
+if ($result->num_rows > 0) {
+  $row = $result->fetch_assoc();
+  $details = "<b>Employee Details</b><br>";
+  $details .= "Name: " . $row["ename"] . "<br>";
+  $details .= "Designation: " . $row["designation"] . "<br>";
+  $details .= "Salary: $" . number_format($row["salary"], 2) .
+
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+Slip 27
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration</title>
+    <script src="script.js"></script> </head>
+<body>
+    <h1>Voter Registration Form</h1>
+    <form id="registrationForm">
+        <label for="name">Name (Uppercase only):</label>
+        <input type="text" id="name" name="name" required placeholder="Enter your name">
+        <br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" min="18" required placeholder="Enter your age">
+        <br>
+        <label for="nationality">Nationality:</label>
+        <select id="nationality" name="nationality" required>
+            <option value="">Select Nationality</option>
+            <option value="Indian">Indian</option>
+        </select>
+        <br>
+        <button type="button" onclick="registerVoter()">Register</button>
+    </form>
+    <div id="message"></div> </body>
+</html>
+
+
+function registerVoter() {
+  const name = document.getElementById("name").value.toUpperCase(); // Convert name to uppercase
+  const age = parseInt(document.getElementById("age").value);
+  const nationality = document.getElementById("nationality").value;
+
+  if (name === "" || age < 18 || nationality === "") {
+    document.getElementById("message").innerHTML = "Please fill all fields and ensure age is 18 or above.";
+    return;
+  }
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "register.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Set header for form data
+  const data = "name=" + name + "&age=" + age + "&nationality=" + nationality;
+
+  xhr.onload = function() {
+    if (this.status === 200) {
+      document.getElementById("message").innerHTML = this.responseText;
+     
+    } else {
+      console.error(this.statusText);
+    }
+  };
+
+  xhr.send(data);
+}
+
+<?php
+$servername = "localhost";
+$username = "your_username";
+$password = "your_password";
+$dbname = "your_database_name";
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+$name = $_POST["name"];
+$age = $_POST["age"];
+$nationality = $_POST["nationality"];
+$message = "Registration successful!"; // Replace with appropriate message
+
+echo $message;
+
+$conn->close();
+?>
+
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+Slip 28
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <script src="script.js"></script> </head>
+<body>
+    <h1>User Login</h1>
+    <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required placeholder="Enter your username">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required placeholder="Enter your password">
+        <br>
+        <button type="button" onclick="checkLogin()">Login</button>
+    </form>
+    <div id="message"></div>
+</body>
+</html>
+
+
+function checkLogin() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  if (username === "" || password === "") {
+    document.getElementById("message").innerHTML = "Please enter Username and Password.";
+    return;
+  }
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "login.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Set header for form data
+  const data = "username=" + username + "&password=" + password;
+
+  xhr.onload = function() {
+    if (this.status === 200) {
+      document.getElementById("message").innerHTML = this.responseText;
+    } else {
+      console.error(this.statusText);
+    }
+  };
+
+  xhr.send(data);
+}
+
+
+<?php
+$servername = "localhost";
+$username = "your_username";
+$password = "your_password";
+$dbname = "your_database_name";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+$username = $_POST["username"];
+$password = $_POST["password"];
+$sql = "SELECT * FROM users WHERE username='$username' AND password='$hashed_password'"; // Replace with hashed password
+$result = $conn->query($sql);
+if ($result->num_rows === 1) {
+  echo "Login successful!"; // Replace with a success message or redirect
+} else {
+  echo "Invalid username or password.";
+}
+
+$conn->close();
+?>
+
+
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+Slip 29
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="get">
+        Enter number: <input type="text" name="n"><br>
+        <input type="radio" name="ch" value="1">Fibonacci Series terms<br>
+        <input type="radio" name="ch" value="2">Calculate Sum of digits<br>
+        <input type="submit" value="submit" name="submit">
+    </form>
+
+    <?php
+    if (isset($_GET['submit'])) {
+        $n = $_GET['n'];
+        $ch = $_GET['ch'];
+
+        switch ($ch) {
+            case 1:
+                echo "<h1>Fibonacci Series:</h1>";
+                $n1 = 0;
+                $n2 = 1; 
+                echo "$n1 <br> $n2 <br>";
+                for ($i = 0; $i < $n - 2; $i++) { 
+                    $n3 = $n1 + $n2;
+                    $n1 = $n2;
+                    $n2 = $n3;
+                    echo "$n3 <br>";
+                }
+                break;
+            case 2:
+                $sum = 0;
+                while ($n > 0) {
+                    $digit = $n % 10;
+                    $sum += $digit;
+                    $n = (int)($n / 10);
+                }
+                echo "<h1>Sum of digits = $sum</h1>";
+                
+        }
+    }
+    ?>
+</body>
+</html>
+
+__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+Slip 30
+
+
+
+<?php 
+
+$str =<<<xml
+    <?xml version ="1.0" ?>
+    <BookStore>
+        <Book>
+            <BookTitle>Yoga</BookTitle>
+            <BookAuthor>ABC</BookAuthor>
+            <BookPrice>Rs.1234</BookPrice>
+        </Book>
+        <Book>
+            <BookTitle>Story</BookTitle>
+            <BookAuthor>PQR</BookAuthor>
+            <BookPrice>Rs.999</BookPrice>
+        </Book>
+        <Book>
+            <BookTitle>Technical</BookTitle>
+            <BookAuthor>XYZ</BookAuthor>
+            <BookPrice>Rs.299</BookPrice>
+        </Book>
+    </BookStore>
+xml;
+
+$fp = fopen("./Bookcategory.xml" , "w+");
+fwrite($fp , $str);
+fclose($fp);
+echo "File created successfully";
+//nano Bookcategory.xml for running
+
